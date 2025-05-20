@@ -7,7 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { BookingProvider } from "./context/BookingContext";
 
 import Index from "./pages/Index";
-import Routes from "./pages/Routes";
+import RoutesPage from "./pages/Routes";
 import SeatSelection from "./pages/SeatSelection";
 import Checkout from "./pages/Checkout";
 import Confirmation from "./pages/Confirmation";
@@ -24,7 +24,7 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
-            <Route path="/routes" element={<Routes />} />
+            <Route path="/routes" element={<RoutesPage />} />
             <Route path="/seat-selection" element={<SeatSelection />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/confirmation" element={<Confirmation />} />
