@@ -51,14 +51,19 @@ const Index = () => {
           </div>
         </section>
 
-        <FeaturedRoutes />
+        <div id="popular-routes">
+          <FeaturedRoutes />
+        </div>
         
         <section className="py-12 bg-bus-primary text-white">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center">
               <h2 className="text-3xl font-bold mb-4">Ready to Travel?</h2>
               <p className="text-xl mb-6">Book your next journey with BusBooker today</p>
-              <button className="bg-white text-bus-primary hover:bg-gray-100 px-6 py-3 rounded-md text-base font-medium">
+              <button 
+                onClick={() => window.location.href = '/routes'}
+                className="bg-white text-bus-primary hover:bg-gray-100 px-6 py-3 rounded-md text-base font-medium"
+              >
                 Book Now
               </button>
             </div>

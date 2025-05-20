@@ -1,8 +1,18 @@
 
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import SearchForm from './SearchForm';
 
 const Hero = () => {
+  const navigate = useNavigate();
+
+  const scrollToPopularRoutes = () => {
+    const routesSection = document.querySelector('#popular-routes');
+    if (routesSection) {
+      routesSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className="relative bg-bus-primary">
       {/* Background pattern */}
@@ -23,10 +33,16 @@ const Hero = () => {
               Choose from hundreds of routes across the country.
             </p>
             <div className="flex space-x-4">
-              <button className="bg-bus-accent hover:bg-bus-secondary text-white px-6 py-3 rounded-md text-base font-medium">
+              <button 
+                onClick={scrollToPopularRoutes}
+                className="bg-bus-accent hover:bg-bus-secondary text-white px-6 py-3 rounded-md text-base font-medium"
+              >
                 View Popular Routes
               </button>
-              <button className="bg-white text-bus-primary hover:bg-gray-100 px-6 py-3 rounded-md text-base font-medium">
+              <button 
+                onClick={() => navigate('/routes')}
+                className="bg-white text-bus-primary hover:bg-gray-100 px-6 py-3 rounded-md text-base font-medium"
+              >
                 Learn More
               </button>
             </div>

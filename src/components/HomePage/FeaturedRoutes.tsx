@@ -1,13 +1,22 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Pagination, PaginationContent, PaginationItem, PaginationLink } from '@/components/ui/pagination';
 import { useBooking, Route } from '@/context/BookingContext';
 
 const FeaturedRoutes = () => {
   const navigate = useNavigate();
   const { availableRoutes, setRoute } = useBooking();
+  const [currentPage, setCurrentPage] = useState(1);
+  const routesPerPage = 6;
+  
+  // Calculate the routes to display on the current page
+  const indexOfLastRoute = currentPage * routesPerPage;
+  const indexOfFirstRoute = indexOfLastRoute - routesPerPage;
+  const currentRoutes = availableRoutes.slice(indexOfFirstRoute, indexOfLastRoute);
+  const totalPages = Math.ceil(availableRoutes.length / routesPerPage);
 
   const handleSelectRoute = (route: Route) => {
     setRoute(route);
@@ -25,7 +34,7 @@ const FeaturedRoutes = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {availableRoutes.slice(0, 6).map((route) => (
+          {currentRoutes.map((route) => (
             <Card key={route.id} className="overflow-hidden transition-all duration-300 hover:shadow-lg">
               <CardHeader className="bg-bus-primary text-white">
                 <CardTitle className="flex justify-between items-center">
@@ -65,6 +74,23 @@ const FeaturedRoutes = () => {
             </Card>
           ))}
         </div>
+
+        {totalPages > 1 && (
+          <Pagination className="mt-8">
+            <PaginationContent>
+              {Array.from({ length: totalPages }).map((_, index) => (
+                <PaginationItem key={index}>
+                  <PaginationLink 
+                    isActive={currentPage === index + 1}
+                    onClick={() => setCurrentPage(index + 1)}
+                  >
+                    {index + 1}
+                  </PaginationLink>
+                </PaginationItem>
+              ))}
+            </PaginationContent>
+          </Pagination>
+        )}
         
         <div className="text-center mt-10">
           <Button 
