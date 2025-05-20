@@ -92,9 +92,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     
     // For now, we'll only accept registering the mock user
     // In a real app, we'd create a new user entry
-    if (name === 'Ritvik Kowshik' && email === 'ritvik@example.com' && password === '123456') {
-      localStorage.setItem('busBookerUser', JSON.stringify(mockUser));
-      setUser(mockUser);
+    if (name && email && password) {
+      const newUser = {
+        ...mockUser,
+        name,
+        email
+      };
+      
+      localStorage.setItem('busBookerUser', JSON.stringify(newUser));
+      setUser(newUser);
       return true;
     }
     
