@@ -1,18 +1,24 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Navbar from '@/components/Layout/Navbar';
 import Footer from '@/components/Layout/Footer';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useBooking } from '@/context/BookingContext';
+import { Download } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
+import ETicket from '@/components/ETicket';
+import { generateTicket } from '@/utils/ticketGenerator';
 
 const Confirmation = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { booking, resetBooking } = useBooking();
+  const { toast } = useToast();
   
   const bookingNumber = location.state?.bookingNumber;
+  const eTicketRef = useRef<HTMLDivElement>(null);
   
   useEffect(() => {
     if (!bookingNumber || !booking.route) {
@@ -23,6 +29,23 @@ const Confirmation = () => {
   const handleReturnHome = () => {
     resetBooking();
     navigate('/');
+  };
+  
+  const handleDownloadTicket = async () => {
+    try {
+      await generateTicket(eTicketRef);
+      toast({
+        title: "Success!",
+        description: "E-Ticket has been downloaded successfully.",
+      });
+    } catch (error) {
+      console.error("Error generating ticket:", error);
+      toast({
+        title: "Error",
+        description: "Failed to download E-Ticket. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
   
   if (!bookingNumber || !booking.route) {
@@ -113,8 +136,9 @@ const Confirmation = () => {
                 <Button 
                   variant="outline" 
                   className="border-bus-primary text-bus-primary"
+                  onClick={handleDownloadTicket}
                 >
-                  Download E-Ticket
+                  <Download className="h-4 w-4 mr-2" /> Download E-Ticket
                 </Button>
                 
                 <div>
@@ -132,6 +156,11 @@ const Confirmation = () => {
               </div>
             </CardContent>
           </Card>
+
+          {/* Hidden E-Ticket component for PDF generation */}
+          <div className="hidden">
+            <ETicket ref={eTicketRef} booking={booking} bookingNumber={bookingNumber} />
+          </div>
         </div>
       </main>
       <Footer />
